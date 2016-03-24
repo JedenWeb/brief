@@ -2,6 +2,8 @@
 
 namespace Brief;
 
+use Brief\Models\Sender;
+
 class Api {
 
 	public $username;
@@ -162,6 +164,51 @@ class Api {
 			->getList()
 			->getModels($this, 'Contact')
 			;
+	}
+	
+	// Newsletters.
+
+	/**
+	 * @param int $campaignId
+	 * @param array $lists
+	 * @param \DateTime|NULL $start
+	 * @param Sender|NULL $sender
+	 * @param array $exclude
+	 *
+	 * @return int
+	 * @throws Exceptions\CurlException
+	 * @throws Exceptions\HttpException
+	 */
+	public function newslettersSend($campaignId, array $lists, \DateTime $start = NULL, Sender $sender = NULL, array $exclude = [])
+	{
+		if ($sender) {
+			$sender = [
+				'type' => 'common',
+				'sendername' => $sender->getName(),
+				'senderemail' => $sender->getEmail(),
+				'replyto' => $sender->getReplyTo(),
+			];
+		} else {
+			$sender = [
+				'type' => 'lists',
+			];
+		}
+
+		if (!$start) {
+			$start = new \DateTime();
+		}
+
+		return $this->createRequest('Newsletters', 'send')
+			->setDetails([
+				'email_id' => $campaignId,
+				'sender' => $sender,
+				'start' => $start->format('Y-m-d H:i:s'),
+				'contactlists' => $lists,
+				'excludedcontactlists' => $exclude,
+			])
+			->getResponse()
+			->getString()
+			->getInt();
 	}
 
 	// Campaigns.
