@@ -38,7 +38,22 @@ class Request {
 	public function setDetails($array) {
 		$details = $this->xmlRequest->addChild('details');
 		foreach ($array as $key => $value) {
-			$details->addChild($key, $value);
+			if (is_array($value)) {
+				$child = $details->addChild($key);
+				$k = key($value);
+
+				if (is_integer($k)) {
+					foreach ($value as $v) {
+						$child->addChild('item', $v);
+					}
+				} else {
+					foreach ($value as $k => $v) {
+						$child->addChild($k, $v);
+					}
+				}
+			} else {
+				$details->addChild($key, $value);
+			}
 		}
 
 		return $this;
