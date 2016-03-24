@@ -18,9 +18,11 @@ class ContactList extends \Brief\Model {
 	{
 		parent::__construct($api);
 
+		$segment = (int) $data->segment_id;
+
 		$this->id = (int)    $data->id;
 		$this->name = (string) $data->name;
-		$this->segment_id = $data->segment_id instanceof \SimpleXMLElement ? NULL : (int) $data->segment_id;
+		$this->segment_id = $segment ?: NULL;
 	}
 
 	public function getContacts() {
