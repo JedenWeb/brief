@@ -2,6 +2,8 @@
 
 namespace Brief;
 
+use Brief\Exceptions\HttpException;
+use Brief\Models\CampaignQueue;
 use Brief\Models\Sender;
 
 class Api {
@@ -175,7 +177,7 @@ class Api {
 	 * @param Sender|NULL $sender
 	 * @param array $exclude
 	 *
-	 * @return int
+	 * @return CampaignQueue|FALSE
 	 * @throws Exceptions\CurlException
 	 * @throws Exceptions\HttpException
 	 */
@@ -198,7 +200,7 @@ class Api {
 			$start = new \DateTime();
 		}
 
-		return $this->createRequest('Newsletters', 'send')
+		$response = $this->createRequest('Newsletters', 'send')
 			->setDetails([
 				'email_id' => $campaignId,
 				'sender' => $sender,
@@ -206,9 +208,46 @@ class Api {
 				'contactlists' => $lists,
 				'excludedcontactlists' => $exclude,
 			])
-			->getResponse()
-			->getString()
-			->getInt();
+			->getResponse();
+
+		if ($response->isOk()) {
+			return new CampaignQueue($this, $response->getData());
+			
+		} else {
+			return FALSE;
+		}
+	}
+
+	/**
+	 * @param int $id
+	 *
+	 * @return CampaignQueue|FALSE
+	 * @throws Exceptions\CurlException
+	 * @throws Exceptions\HttpException
+	 */
+	public function newslettersGetOne($id)
+	{
+		$request = $this->createRequest('Newsletters', 'getOne')
+			->setDetails([
+				'id' => $id,
+			]);
+
+		try {
+			$response = $request->getResponse();
+		} catch (HttpException $e) {
+			if ($e->getCode() === 404) {
+				return FALSE;
+			} else {
+				throw $e;
+			}
+		}
+
+		if ($response->isOk()) {
+			return new CampaignQueue($this, $response->getData());
+
+		} else {
+			return FALSE;
+		}
 	}
 
 	// Campaigns.

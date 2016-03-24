@@ -10,6 +10,14 @@ class Response {
 		$this->response = $response;
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function isOk()
+	{
+		return (string) $this->response->status === 'SUCCESS';
+	}
+
 	public function getData() {
 		if (isset($this->response->data)) {
 			return $this->response->data;
