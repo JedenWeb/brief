@@ -108,6 +108,16 @@ class Api {
 			;
 	}
 
+	public function contactListsGetById($id) {
+		foreach ($this->contactListsGetAll() as $contactList) {
+			if ($contactList->id === $id) {
+				return $contactList;
+			}
+		}
+
+		return false;
+	}
+
 	public function contactListsGetByName($name) {
 		foreach ($this->contactListsGetAll() as $contactList) {
 			if ($contactList->name == $name) {
