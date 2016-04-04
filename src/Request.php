@@ -4,16 +4,23 @@ namespace Brief;
 
 class Request {
 
+	/** @var Api */
 	public $api;
+
+	/** @var XmlRequest */
 	public $xmlRequest;
 
+	/** @var int */
 	public $timeout = 30;
 
-	public function __construct($api) {
+
+	/**
+	 * @param Api $api
+	 */
+	public function __construct(Api $api)
+	{
 		$this->api = $api;
 		$this->xmlRequest = new XmlRequest($api);
-
-		return $this;
 	}
 
 	public function setTimeout($timeout) {
@@ -35,26 +42,12 @@ class Request {
 		return $this;
 	}
 
-	public function setDetails($array) {
-		$details = $this->xmlRequest->addChild('details');
-		foreach ($array as $key => $value) {
-			if (is_array($value)) {
-				$child = $details->addChild($key);
-				$k = key($value);
-
-				if (is_integer($k)) {
-					foreach ($value as $v) {
-						$child->addChild('item', $v);
-					}
-				} else {
-					foreach ($value as $k => $v) {
-						$child->addChild($k, $v);
-					}
-				}
-			} else {
-				$details->addChild($key, $value);
-			}
-		}
+	/**
+	 * @param array $array
+	 */
+	public function setDetails(array $array)
+	{
+		$this->xmlRequest->setDetails($array);
 
 		return $this;
 	}
