@@ -14,7 +14,7 @@ class DataList extends Data implements \IteratorAggregate {
 			return $list;
 		}
 
-		return false;
+		return [];
 	}
 
 	public function getIterator() {
