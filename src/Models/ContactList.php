@@ -13,6 +13,9 @@ class ContactList extends \Brief\Model {
 	/** @var int|NULL */
 	public $segment_id;
 
+	/** @var string */
+	public $note;
+
 
 	public function __construct($api, $data)
 	{
@@ -23,6 +26,7 @@ class ContactList extends \Brief\Model {
 		$this->id = (int)    $data->id;
 		$this->name = (string) $data->name;
 		$this->segment_id = $segment ?: NULL;
+		$this->note = (string) $data->notes;
 	}
 
 	public function getContacts() {
