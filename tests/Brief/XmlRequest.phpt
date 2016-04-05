@@ -32,3 +32,16 @@ $expected = '<?xml version="1.0"?>
 ';
 
 \Tester\Assert::same($expected, $xmlRequest->asXml());
+
+
+$xmlRequest = new XmlRequest($api);
+
+$xmlRequest->setDetails([
+	'id' => 1,
+]);
+
+$expected = '<?xml version="1.0"?>
+<xmlrequest><username>abc</username><usertoken>xyz</usertoken><details><id>1</id></details></xmlrequest>
+';
+
+\Tester\Assert::same($expected, $xmlRequest->asXml());

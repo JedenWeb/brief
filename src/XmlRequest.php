@@ -48,7 +48,12 @@ class XmlRequest {
 
 				if (is_integer($k)) {
 					foreach ($value as $v) {
-						$this->mapXmlNodes($child->addChild('item'), $v);
+						if (is_array($v)) {
+							$this->mapXmlNodes($child->addChild('item'), $v);
+						} else {
+							$child->addChild('item', $v);
+						}
+//						$this->mapXmlNodes($child->addChild('item'), $v);
 					}
 				} else {
 					$this->mapXmlNodes($child, $value);
