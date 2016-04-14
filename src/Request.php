@@ -2,6 +2,8 @@
 
 namespace Brief;
 
+use Nette\Diagnostics\Debugger;
+
 class Request {
 
 	/** @var Api */
@@ -59,8 +61,10 @@ class Request {
 		$response = $curl->post($this->api->apiUrl, $this->xmlRequest->asXml());
 
 		if ($curl->curlError) {
+			Debugger::log($this->xmlRequest->asXml(), 'brief');
 			throw new Exceptions\CurlException($curl->curlErrorMessage, $curl->curlErrorCode);
 		} elseif ($curl->httpError) {
+			Debugger::log($this->xmlRequest->asXml(), 'brief');
 			throw new Exceptions\HttpException($curl->httpErrorMessage, $curl->httpStatusCode);
 		}
 
