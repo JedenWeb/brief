@@ -2,7 +2,7 @@
 
 namespace Brief;
 
-use Nette\Diagnostics\Debugger;
+use Tracy\Debugger;
 
 class Request {
 
